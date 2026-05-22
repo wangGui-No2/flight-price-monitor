@@ -5,7 +5,9 @@
 """
 
 import os
+import sys
 import json
+import traceback
 import subprocess
 import requests
 from datetime import datetime
@@ -48,54 +50,64 @@ def search_flights():
     items = data.get("data", {}).get("itemList", [])
 
     results = []
-    for item in items:
-        journeys = item.get("journeys", [])
-        out = journeys[0] if len(journeys) > 0 else {}
-        ret = journeys[1] if len(journeys) > 1 else {}
+    for idx, item in enumerate(items):
+        try:
+            journeys = item.get("journeys", [])
+            out = journeys[0] if len(journeys) > 0 else {}
+            ret = journeys[1] if len(journeys) > 1 else {}
 
-        out_seg = out.get("segments", [{}])[0]
-        ret_seg = ret.get("segments", [{}])[0]
+            out_seg = out.get("segments", [{}])[0]
+            ret_seg = ret.get("segments", [{}])[0]
 
-        price = float(item.get("ticketPrice", 0))
+            price = float(item.get("ticketPrice", 0))
 
-        out_dep = out_seg.get("depDateTime", "")
-        out_dep_time = out_dep.split()[-1] if out_dep else ""
-        out_hour = int(out_dep_time.split(":")[0]) if out_dep_time else 99
-        out_arr = (out_seg.get("arrDateTime", "").split()[-1]
-                   if out_seg.get("arrDateTime") else "")
-        out_airline = out_seg.get("marketingTransportName", "?")
-        out_no = out_seg.get("marketingTransportNo", "?")
+            def safe_time(val):
+                """安全提取时间字符串，兼容 str/dict 类型"""
+                if isinstance(val, str) and val:
+                    parts = val.split()
+                    return parts[-1] if parts else val
+                if isinstance(val, dict):
+                    return str(val.get("time", "")) or ""
+                return str(val) if val else ""
 
-        ret_dep = ret_seg.get("depDateTime", "")
-        ret_dep_time = ret_seg.split()[-1] if ret_dep else ""
-        ret_hour = int(ret_dep_time.split(":")[0]) if ret_dep_time else 99
-        ret_arr = (ret_seg.get("arrDateTime", "").split()[-1]
-                   if ret_seg.get("arrDateTime") else "")
-        ret_airline = ret_seg.get("marketingTransportName", "?")
-        ret_no = ret_seg.get("marketingTransportNo", "?")
+            out_dep_time = safe_time(out_seg.get("depDateTime", ""))
+            out_hour = int(out_dep_time.split(":")[0]) if out_dep_time and ":" in out_dep_time else 99
+            out_arr_time = safe_time(out_seg.get("arrDateTime", ""))
 
-        dur_out = int(out.get("totalDuration", 0))
-        dur_ret = int(ret.get("totalDuration", 0))
-        jump_url = item.get("jumpUrl", "")
+            out_airline = str(out_seg.get("marketingTransportName", "?"))
+            out_no = str(out_seg.get("marketingTransportNo", "?"))
 
-        results.append({
-            "price": price,
-            "out_airline": out_airline,
-            "out_no": out_no,
-            "out_dep_time": out_dep_time,
-            "out_arr_time": out_arr,
-            "out_hour": out_hour,
-            "out_dur": dur_out,
-            "ret_airline": ret_airline,
-            "ret_no": ret_no,
-            "ret_dep_time": ret_dep_time,
-            "ret_arr_time": ret_arr,
-            "ret_hour": ret_hour,
-            "ret_dur": dur_ret,
-            "outbound_ok": out_hour < OUTBOUND_BEFORE_HOUR,
-            "return_ok": ret_hour >= RETURN_AFTER_HOUR,
-            "jump_url": jump_url,
-        })
+            ret_dep_time = safe_time(ret_seg.get("depDateTime", ""))
+            ret_hour = int(ret_dep_time.split(":")[0]) if ret_dep_time and ":" in ret_dep_time else 99
+            ret_arr_time = safe_time(ret_seg.get("arrDateTime", ""))
+
+            ret_airline = str(ret_seg.get("marketingTransportName", "?"))
+            ret_no = str(ret_seg.get("marketingTransportNo", "?"))
+
+            dur_out = int(out.get("totalDuration", 0))
+            dur_ret = int(ret.get("totalDuration", 0))
+            jump_url = item.get("jumpUrl", "")
+
+                results.append({
+                "price": price,
+                "out_airline": out_airline,
+                "out_no": out_no,
+                "out_dep_time": out_dep_time,
+                "out_arr_time": out_arr_time,
+                "out_hour": out_hour,
+                "out_dur": dur_out,
+                "ret_airline": ret_airline,
+                "ret_no": ret_no,
+                "ret_dep_time": ret_dep_time,
+                "ret_arr_time": ret_arr_time,
+                "ret_hour": ret_hour,
+                "ret_dur": dur_ret,
+                "outbound_ok": out_hour < OUTBOUND_BEFORE_HOUR,
+                "return_ok": ret_hour >= RETURN_AFTER_HOUR,
+                "jump_url": jump_url,
+            })
+        except Exception as e:
+            print(f"  ⚠️ 解析第 {idx+1} 条结果失败: {e}")
 
     return results
 
