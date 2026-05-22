@@ -1,8 +1,8 @@
-name: 机票价格日报
+name: 机票价格日报（飞猪数据）
 
 on:
   schedule:
-    # 北京时间 9:00 / 14:00 / 20:00 (UTC+8)
+    # 北京时间 9:00 / 14:00 / 20:00
     - cron: "0 1,6,12 * * *"
   workflow_dispatch:
 
@@ -14,16 +14,22 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: 安装 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: 安装依赖
-        run: pip install -r requirements.txt
+        run: |
+          npm install -g @fly-ai/flyai-cli
+          pip install requests
 
       - name: 查询机票价格并推送飞书日报
         env:
-          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
         run: python check_flight.py
