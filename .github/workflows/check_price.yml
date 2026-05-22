@@ -1,14 +1,19 @@
-name: 机票价格日报（飞猪数据）
+name: 机票价格变动监控
 
 on:
   schedule:
-    # 北京时间 9:00 / 14:00 / 20:00
-    - cron: "0 1,6,12 * * *"
+    # 每2小时 — 北京时间 8:00/10:00/12:00/14:00/16:00/18:00/20:00/22:00
+    # 对应 UTC 0:00/2:00/4:00/6:00/8:00/10:00/12:00/14:00
+    # 覆盖航司定价系统更新窗口（早间批量/午间竞争匹配/晚间调整）
+    - cron: "0 0,2,4,6,8,10,12,14 * * *"
   workflow_dispatch:
 
 jobs:
   check-price:
     runs-on: ubuntu-latest
+    # 允许写入仓库（用于提交价格历史）
+    permissions:
+      contents: write
 
     steps:
       - name: 检出代码
@@ -29,7 +34,21 @@ jobs:
           npm install -g @fly-ai/flyai-cli
           pip install requests
 
-      - name: 查询机票价格并推送飞书日报
+      - name: 配置飞猪 API Key
+        env:
+          FLYAI_API_KEY: ${{ secrets.FLYAI_API_KEY }}
+        run: flyai config set FLYAI_API_KEY "$FLYAI_API_KEY"
+
+      - name: 查询机票价格
         env:
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
         run: python check_flight.py
+
+      - name: 提交价格历史
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add price_history.json
+          git diff --staged --quiet || git commit -m "📊 更新价格历史"
+          git push
