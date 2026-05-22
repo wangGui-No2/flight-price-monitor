@@ -88,7 +88,7 @@ def search_flights():
             dur_ret = int(ret.get("totalDuration", 0))
             jump_url = item.get("jumpUrl", "")
 
-                results.append({
+            results.append({
                 "price": price,
                 "out_airline": out_airline,
                 "out_no": out_no,
