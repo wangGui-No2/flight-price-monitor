@@ -1,0 +1,39 @@
+name: 机票价格监控
+
+on:
+  schedule:
+    # 北京时间 9:00 / 14:00 / 20:00 (UTC+8)
+    # 即 UTC 1:00 / 6:00 / 12:00
+    - cron: "0 1,6,12 * * *"
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  check-price:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安装依赖
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install chromium --with-deps
+
+      - name: 查询机票价格
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        run: python check_flight.py
+
+      - name: 上传截图（调试用）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flight-screenshot
+          path: /tmp/flight_result.png
+          retention-days: 3
