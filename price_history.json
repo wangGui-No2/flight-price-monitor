@@ -575,6 +575,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-05-30T15:08:35.785659",
+      "cheapest": 1491.0,
+      "cheapest_airline": "东航 MU5441",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1491.0,
+        1492.0,
+        1492.0,
+        1492.0,
+        1496.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
