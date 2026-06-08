@@ -1103,6 +1103,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-06-08T04:09:54.512448",
+      "cheapest": 1198.0,
+      "cheapest_airline": "川航 3U6996",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1198.0,
+        1214.0,
+        1253.0,
+        1253.0,
+        1281.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
