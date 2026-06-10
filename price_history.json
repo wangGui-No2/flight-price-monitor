@@ -1231,6 +1231,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-06-10T08:09:22.721109",
+      "cheapest": 1378.0,
+      "cheapest_airline": "川航 3U6996",
+      "perfect_match": 1463.0,
+      "perfect_airline": "吉祥 HO1039",
+      "top5": [
+        1378.0,
+        1397.0,
+        1463.0,
+        1474.0,
+        1572.0
+      ],
+      "total_results": 10,
+      "perfect_count": 2
     }
   ]
 }
