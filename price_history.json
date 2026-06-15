@@ -1519,6 +1519,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-06-15T12:18:16.792423",
+      "cheapest": 1511.0,
+      "cheapest_airline": "新海航|海南航空 HU7427",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1511.0,
+        1570.0,
+        1580.0,
+        1582.0,
+        1605.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
