@@ -1823,6 +1823,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-06-21T09:52:04.532540",
+      "cheapest": 1500.0,
+      "cheapest_airline": "春秋 9C6101",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1500.0,
+        1515.0,
+        1550.0,
+        1595.0,
+        1595.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
