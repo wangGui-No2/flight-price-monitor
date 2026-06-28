@@ -2255,6 +2255,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-06-28T03:58:16.922057",
+      "cheapest": 1245.0,
+      "cheapest_airline": "吉祥 HO1039",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1245.0,
+        1320.0,
+        1359.0,
+        1420.0,
+        1425.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
