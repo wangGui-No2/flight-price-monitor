@@ -2607,6 +2607,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-07-03T10:37:14.967103",
+      "cheapest": 1268.0,
+      "cheapest_airline": "成都航 EU6678",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1268.0,
+        1370.0,
+        1388.0,
+        1570.0,
+        1770.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
