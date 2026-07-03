@@ -2591,6 +2591,22 @@
       ],
       "total_results": 10,
       "perfect_count": 0
+    },
+    {
+      "time": "2026-07-03T07:21:40.585103",
+      "cheapest": 1450.0,
+      "cheapest_airline": "国航 CA4536",
+      "perfect_match": null,
+      "perfect_airline": null,
+      "top5": [
+        1450.0,
+        1551.0,
+        1568.0,
+        1570.0,
+        1895.0
+      ],
+      "total_results": 10,
+      "perfect_count": 0
     }
   ]
 }
